@@ -1,0 +1,30 @@
+name: Lint Code
+
+on: [workflow_dispatch, pull_request, push]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  lint:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download & extract glualint
+      run: |
+        wget -c https://github.com/FPtje/GLuaFixer/releases/download/1.24.0/glualint-1.24.0-x86_64-linux.zip -O glualint.zip
+        unzip -u glualint.zip
+        rm glualint.zip
+        echo "creating config for glualint"
+        cat > glualint.json << ENDOFFILE
+        {
+          "lint_maxScopeDepth": 10,
+          "failOnWarning": true
+        }
+        ENDOFFILE
+        echo "done"
+        
+    - name: Check code with glualint
+      run: ./glualint --output-format github lint .
