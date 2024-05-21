@@ -1,2 +1,3 @@
-# gmod_actions
-Github Actions useful for Garrysmod
+# Gmod Actions
+
+Feel free to contribute to existing actions or suggest new Features/Actions
