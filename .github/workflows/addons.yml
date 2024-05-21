@@ -1,0 +1,27 @@
+name: Update Addons on FTP
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+    deploy_addons:
+      #if: github.event.pull_request.merged == true
+      runs-on: ubuntu-latest
+      name: deploy_addons
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Reupload all addons files
+          uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+          with:
+             username: ${{ secrets.FTP_USERNAME }}
+             server: ${{ secrets.FTP_SERVER }}
+             port: ${{ secrets.FTP_PORT }}
+             local_path: './addons/*'
+             remote_path: '/garrysmod/addons'
+             sftp_only: true
+             delete_remote_files: true
+             password: ${{ secrets.FTP_PASSWORD }}
